@@ -28,8 +28,8 @@ let blackJackGame = {
   losses: 0,
   draws: 0,
 
-  isStand: false, // did user clicked the STAND button?
-  turnsOver: false,
+  isStand: false,    // did the user click the STAND button?
+  turnsOver: false,  // did bot finish his turn?
 };
 
 //                  P L A Y E R S
