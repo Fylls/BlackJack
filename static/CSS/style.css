@@ -1,0 +1,55 @@
+.container-5 {
+  border: 1px solid black;
+  width: 75%;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.flex-bj-row-1,
+.flex-bj-row-2,
+.flex-bj-row-3 {
+  padding: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: space-around;
+  border: 1px solid black;
+}
+
+.flex-bj-row-1,
+.flex-bj-row-2 {
+  background: url("../images/tableBackground.jpg") center;
+  color: white;
+}
+
+.flex-bj-row-1 div {
+  border: 1px solid black;
+  padding: 10px;
+  height: 350px;
+  flex: 1;
+  text-align: center;
+}
+
+.flex-bj-row-1 img {
+  width: 25%;
+  padding: 10px;
+  flex: 1;
+}
+
+.flex-bj-row-2 button {
+  border: 1px solid black;
+  padding: 10px;
+}
+
+.flex-bj-row-2 div {
+  border: 1px solid black;
+  padding: 10px;
+}
+
+table,
+th,
+td {
+  padding: 5px;
+  border: 1px solid black;
+  text-align: center;
+}
