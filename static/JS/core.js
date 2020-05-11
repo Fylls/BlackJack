@@ -1,5 +1,3 @@
-//  Callenge 5: BlackJack
-
 let blackJackGame = {
   you: { scoreSpan: "#your-bj-score", div: ".your-box", score: 0 },
 
@@ -24,29 +22,61 @@ let blackJackGame = {
   },
 };
 
+// easy way to work with data: makes code more readable
 const YOU = blackJackGame.you;
 const DEALER = blackJackGame.dealer;
 
+//                  B U T T O N S
+
+// these f()s are written without any onClick properties in the HTML file
+// we use .addEventListener( "click", f() ) to register click events
+let hitButton = document.getElementById("bj-hit");
+hitButton.addEventListener("click", blackJackHIT);
+
+let standButton = document.getElementById("bj-stand");
+standButton.addEventListener("click", dealerLogic);
+
+let dealButton = document.getElementById("bj-deal");
+dealButton.addEventListener("click", blackJackDEAL);
+
+//                   A U D I O S
+
+const hitSound = new Audio("static/audio/swish.m4a");
+
+//                F U N C T I O N S
+
+//  this f() generates card choosing randomly from an array
 function randomCard() {
   let randomIndex = Math.floor(Math.random() * 13);
   return blackJackGame.cards[randomIndex];
 }
 
+//  this f() handles the graphics for a selected card to be displayed
+function showCards(card, activePlayer) {
+  if (activePlayer.score <= 21) {
+    let cardImage = document.createElement("img");
+    cardImage.src = `static/images/${card}.png`;
+    document.querySelector(activePlayer.div).appendChild(cardImage);
+    hitSound.play();
+  }
+}
+
+//  this f() updates the internal score of both players
 function UpdateScore(card, activePlayer) {
   // if adding 11 keeps player under 21: ADD 11, otherwise: ADD 1
   if (card === "A") {
     if (activePlayer.score + blackJackGame.cardsValue[card][1] <= 21) {
-      // +blackJackGame.cardsValue[card][1]
-      activePlayer.score += 11;
+      activePlayer.score += 11; // +blackJackGame.cardsValue[card][1]
     } else {
-      // +blackJackGame.cardsValue[card][0]
-      activePlayer.score += 1;
+      activePlayer.score += 1; // +blackJackGame.cardsValue[card][0]
     }
   } else {
     activePlayer.score += blackJackGame.cardsValue[card];
   }
 }
 
+//  based on the internal score, this f() handles
+//  the graphic partfor the score in order to be diplayed
 function showScore(activePlayer) {
   if (activePlayer.score <= 21) {
     document.querySelector(activePlayer.scoreSpan).textContent =
@@ -57,15 +87,9 @@ function showScore(activePlayer) {
   }
 }
 
-const hitSound = new Audio("static/audio/swish.m4a");
+//                G A M E   L O G I C S
 
-// you don't have to write an onClick in the HTML part
-let hitButton = document.getElementById("bj-hit");
-hitButton.addEventListener("click", blackJackHIT);
-
-let dealButton = document.getElementById("bj-deal");
-dealButton.addEventListener("click", blackJackDEAL);
-
+// onClick HIT button
 function blackJackHIT() {
   let card = randomCard();
   showCards(card, YOU);
@@ -73,16 +97,9 @@ function blackJackHIT() {
   showScore(YOU);
 }
 
-function showCards(card, activePlayer) {
-  if (activePlayer.score <= 21) {
-    let cardImage = document.createElement("img");
-    cardImage.src = `static/images/${card}.png`;
-    document.querySelector(activePlayer.div).appendChild(cardImage);
-    hitSound.play();
-  }
-}
-
+// onClick DEAL button
 function blackJackDEAL() {
+  computeWinner();
   let yourCards = document.querySelector(YOU.div).querySelectorAll("img");
 
   let dealerCards = document.querySelector(DEALER.div).querySelectorAll("img");
@@ -97,4 +114,39 @@ function blackJackDEAL() {
 
   document.querySelector("#your-bj-score").style.color = "#ffffff";
   document.querySelector("#dealer-bj-score").style.color = "#ffffff";
+}
+
+// this f() regulates the dealer behaviour
+function dealerLogic() {
+  let card = randomCard();
+  showCards(card, DEALER);
+  UpdateScore(card, DEALER);
+  showScore(DEALER);
+}
+
+// this f() computes winner and returns who just won
+function computeWinner() {
+  let winner;
+  if (YOU.score <= 21) {
+    // condition : higher score than dealer OR  dealer busts
+    if (YOU.score > DEALER.score || DEALER.score > 21) {
+      winner = YOU;
+      console.log("WON");
+    } else if (YOU.score < DEALER.score || YOU.score > 21) {
+      winner = DEALER;
+      console.log("LOST");
+    } else if (YOU.score === DEALER.score) {
+      console.log("DREW");
+    }
+    // condition : when user busts but dealer doesn't
+  } else if (YOU.score > 21 && DEALER.score <= 21) {
+    winner = DEALER;
+    console.log("LOST");
+
+    // when both user anjd dealer bust
+  } else if (YOU.score > 21 && DEALER.score > 21) {
+    console.log("DREW");
+  }
+  console.log("winner is", winner);
+  return winner;
 }
