@@ -169,6 +169,7 @@ function computeWinner() {
   let winner;
   // prettier-ignore
   if (YOU.score <= 21) {
+    
     // condition : higher score than dealer OR  dealer busts
     if (YOU.score > DEALER.score || DEALER.score > 21) {
       winner = YOU;
@@ -200,16 +201,19 @@ function showResult(winner) {
   let message, messageColor;
 
   if (blackJackGame.turnsOver === true) {
+    
     if (winner === YOU) {
       document.querySelector("#wins").textContent = blackJackGame.wins;
       message = "you won!";
       messageColor = "green";
       winSound.play();
+      
     } else if (winner === DEALER) {
       document.querySelector("#losses").textContent = blackJackGame.losses;
       message = "you lost!";
       messageColor = "red";
       lossSound.play();
+      
     } else {
       document.querySelector("#draws").textContent = blackJackGame.draws;
       message = "you drew!";
